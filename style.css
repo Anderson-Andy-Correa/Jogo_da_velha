@@ -211,3 +211,15 @@ body.dark .winner-cell {
   cursor: pointer;
 }
 
+.board.draw {
+  background-color: #cccccc; /* cinza claro */
+  transition: background-color 0.5s ease;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.board.gray-out {
+  filter: grayscale(100%);
+  transition: filter 0.5s ease;
+}
+

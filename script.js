@@ -50,7 +50,6 @@ function handleMove(e) {
   soundClick.play();
   
   makeMove(index, currentPlayer);
-  if (checkResult()) return;
 
   if (currentPlayer === 'O') {
     setTimeout(() => {
@@ -68,15 +67,15 @@ function makeMove(index, player) {
   
     cell.textContent = emoji;
     cell.classList.add(filledClass);
-  
-    if (checkResult()) return;
-  
+    if (checkResult(player)) {
+        return; // Só troca jogador se o jogo não acabou
+      }
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
     statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
   }
   
 
-  function checkResult() {
+  function checkResult(player) {
     for (let condition of winningConditions) {
       const [a, b, c] = condition;
       if (
@@ -88,7 +87,7 @@ function makeMove(index, player) {
         var winClass;
         bgMusic.pause();
         bgMusic.currentTime = 0;
-        if (currentPlayer === 'X') {
+        if (player === 'X') {
             soundWin.play();  // Vitória do jogador
             emoji = '❌';
             winClass = 'win-x';
@@ -100,7 +99,7 @@ function makeMove(index, player) {
   
         statusText.textContent = `Vitória de: ${emoji}`;
         statusText.className = winClass;
-        scores[currentPlayer]++;
+        scores[player]++;
         updateScores();
   
         // Aplica a animação de piscar às células vencedoras
@@ -114,14 +113,17 @@ function makeMove(index, player) {
     }
   
     if (!gameState.includes('')) {
-      statusText.textContent = 'Empate! 🤝';
-      soundDraw.play();
-      statusText.className = 'draw';
-      scores.Draw++;
-      updateScores();
-      gameActive = false;
-      return true;
-    }
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+        soundDraw.play();
+        statusText.textContent = 'Empate! 🤝';
+        statusText.className = 'draw';
+        board.classList.add('gray-out');
+        scores.Draw++;
+        updateScores();
+        gameActive = false;
+        return true;
+      }
   
     return false;
   }
@@ -135,6 +137,8 @@ function updateScores() {
 }
 
 function restartGame() {
+    board.classList.remove('gray-out');
+    board.classList.remove('draw');
     stopAllSounds();
     currentPlayer = 'X';
     gameActive = true;
