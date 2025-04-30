@@ -10,6 +10,9 @@ const soundClick = new Audio('sounds/click.mp3');
 const soundWin = new Audio('sounds/Win.mp3');
 const soundLose = new Audio('sounds/Fail.ogg');
 const soundDraw = new Audio('sounds/Empate.ogg');
+const bgMusic = new Audio('sounds/background.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.4;
 
 
 let currentPlayer = 'X';
@@ -83,6 +86,8 @@ function makeMove(index, player) {
       ) {
         var emoji;
         var winClass;
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
         if (currentPlayer === 'X') {
             soundWin.play();  // Vitória do jogador
             emoji = '❌';
@@ -137,6 +142,8 @@ function restartGame() {
     statusText.textContent = `Vez de: ❌`;
     statusText.className = '';
     createBoard();
+
+    bgMusic.play();
   }
   
   
@@ -202,7 +209,7 @@ function checkWin(board, player) {
 }
 
 function stopAllSounds() {
-    [soundClick, soundWin, soundDraw, soundLose].forEach(sound => {
+    [soundClick, soundWin, soundDraw, soundLose, bgMusic].forEach(sound => {
       sound.pause();
       sound.currentTime = 0;
     });
@@ -225,4 +232,13 @@ createBoard();
 if (!document.body.classList.contains('dark') && !document.body.classList.contains('light')) {
     document.body.classList.add('light');
   }
+
+  const startModal = document.getElementById('startModal');
+  const startGameBtn = document.getElementById('startGameBtn');
+  
+  startGameBtn.addEventListener('click', () => {
+    startModal.style.display = 'none';
+    bgMusic.play();
+  });
+  
   
