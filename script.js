@@ -6,6 +6,11 @@ const difficultySelect = document.getElementById('difficulty');
 const scoreX = document.getElementById('scoreX');
 const scoreO = document.getElementById('scoreO');
 const scoreDraw = document.getElementById('scoreDraw');
+const soundClick = new Audio('sounds/click.mp3');
+const soundWin = new Audio('sounds/Win.mp3');
+const soundLose = new Audio('sounds/Fail.ogg');
+const soundDraw = new Audio('sounds/Empate.ogg');
+
 
 let currentPlayer = 'X';
 let gameActive = true;
@@ -39,6 +44,8 @@ function handleMove(e) {
   const index = e.target.getAttribute('data-index');
   if (!gameActive || gameState[index]) return;
 
+  soundClick.play();
+  
   makeMove(index, currentPlayer);
   if (checkResult()) return;
 
@@ -74,8 +81,17 @@ function makeMove(index, player) {
         gameState[a] === gameState[b] &&
         gameState[a] === gameState[c]
       ) {
-        const emoji = currentPlayer === 'X' ? '❌' : '⭕';
-        const winClass = currentPlayer === 'X' ? 'win-x' : 'win-o';
+        var emoji;
+        var winClass;
+        if (currentPlayer === 'X') {
+            soundWin.play();  // Vitória do jogador
+            emoji = '❌';
+            winClass = 'win-x';
+          } else {
+            soundLose.play(); // Toca som de derrota se o jogador perder para a IA
+            emoji = '⭕';
+            winClass = 'win-o';
+          }
   
         statusText.textContent = `Vitória de: ${emoji}`;
         statusText.className = winClass;
@@ -94,6 +110,7 @@ function makeMove(index, player) {
   
     if (!gameState.includes('')) {
       statusText.textContent = 'Empate! 🤝';
+      soundDraw.play();
       statusText.className = 'draw';
       scores.Draw++;
       updateScores();
@@ -113,6 +130,7 @@ function updateScores() {
 }
 
 function restartGame() {
+    stopAllSounds();
     currentPlayer = 'X';
     gameActive = true;
     gameState = ['', '', '', '', '', '', '', '', ''];
@@ -120,6 +138,7 @@ function restartGame() {
     statusText.className = '';
     createBoard();
   }
+  
   
   
 
@@ -181,6 +200,14 @@ function checkWin(board, player) {
     board[a] === player && board[b] === player && board[c] === player
   );
 }
+
+function stopAllSounds() {
+    [soundClick, soundWin, soundDraw, soundLose].forEach(sound => {
+      sound.pause();
+      sound.currentTime = 0;
+    });
+  }
+  
  
 
 // Eventos
