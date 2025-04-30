@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo da Velha</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-container">
+    <h1>Jogo da Velha</h1>
+
+    <div class="controls">
+      <label for="difficulty">Dificuldade:</label>
+      <select id="difficulty">
+        <option value="easy">Fácil</option>
+        <option value="hard">Difícil</option>
+      </select>
+
+      <button id="toggle-theme">🌞 / 🌙</button>
+    </div>
+
+    <div id="status">Vez de: X</div>
+
+    <div class="board" id="board"></div>
+
+    <div class="scoreboard">
+      <p>Vitórias X: <span id="scoreX">0</span></p>
+      <p>Vitórias O: <span id="scoreO">0</span></p>
+      <p>Empates: <span id="scoreDraw">0</span></p>
+    </div>
+
+    <button id="restart">Reiniciar Jogo</button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
