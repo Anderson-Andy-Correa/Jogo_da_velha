@@ -12,7 +12,10 @@ const soundLose = new Audio('sounds/Fail.ogg');
 const soundDraw = new Audio('sounds/Empate.ogg');
 const bgMusic = new Audio('sounds/background.mp3');
 bgMusic.loop = true;
-bgMusic.volume = 0.4;
+bgMusic.volume = 0.3;
+soundWin.volume = 0.3;
+soundLose.volume = 0.3;
+soundDraw.volume = 0.3;
 
 let gameStarted = false;
 let totalSeconds = 0;
