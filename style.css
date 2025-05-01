@@ -303,7 +303,7 @@ body.dark #difficulty {
     justify-content: center;
     min-width: 120px;
     text-align: center;
-  }  
+  }
 
   .scoreboard p, .timers p {
     text-align: center;
@@ -347,26 +347,28 @@ body.dark #difficulty {
 }
 
 .mute-btn {
-  padding: 10px 20px;
-  background-color: #444; /* Cor escura de fundo */
-  color: white; /* Cor do texto em branco */
-  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  background-color: var(--cell-bg);
+  color: var(--text);
+  border: 2px solid #ccc;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
 body.dark .mute-btn {
-  background-color: #333;  /* Um tom mais escuro para o botão */
+  background-color: var(--cell-bg);;
   color: white;
+  border-color: #555;
 }
 
 body.dark .mute-btn:hover {
-  background-color: #555; /* Cor de fundo ao passar o mouse */
+  background-color: #555;
 }
 
 body.dark .mute-btn:focus {
@@ -375,7 +377,7 @@ body.dark .mute-btn:focus {
 }
 
 body.light .mute-btn {
-  background-color: #f0f0f0; /* Cor clara de fundo */
+  background-color: var(--cell-bg); /* Cor clara de fundo */
   color: #333; /* Cor do texto em escuro */
 }
 
@@ -390,4 +392,65 @@ body.light .mute-btn:focus {
 
 .mute-btn i {
   margin-right: 8px;
+}
+
+#symbolSelect {
+  padding: 8px 12px;
+  font-size: 1rem;
+  background-color: var(--cell-bg);
+  color: var(--text);
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  width: 70px;
+  text-align: center;
+}
+
+/* Para o modo escuro */
+body.dark #symbolSelect {
+  background-color: var(--cell-hover);
+  border-color: #007bff;
+}
+
+/* Efeito ao passar o mouse e ao focar */
+#symbolSelect:hover, #symbolSelect:focus {
+  background-color: var(--cell-hover);
+  border-color: #007bff;
+}
+
+#toggle-theme {
+  padding: 8px 12px;
+  font-size: 1rem;
+  background-color: var(--cell-bg);
+  color: var(--text);
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark #toggle-theme {
+  background-color: var(--cell-bg);
+  color: #fff;
+  border-color: #555;
+}
+
+/* Hover effect para o botão de tema */
+#toggle-theme:hover {
+  background-color: var(--cell-hover);
+  border-color: #007bff;
+}
+
+/* Ajuste no grupo de controles */
+.difficulty-group, #symbolSelection {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#symbolSelection {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

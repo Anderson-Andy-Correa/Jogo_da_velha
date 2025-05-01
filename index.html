@@ -20,6 +20,13 @@
       </div>
       <button id="toggle-theme">🌞 / 🌙</button>
       <button id="muteBtn" class="mute-btn">🔊</button>
+      <div id="symbolSelection">
+        <label for="symbolSelect">Símbolo:</label>
+        <select id="symbolSelect" class="select">
+          <option value="X">❌</option>
+          <option value="O">⭕</option>
+        </select>
+      </div>
     </div>
   
     <div class="game-layout">
@@ -27,7 +34,7 @@
       <div class="side-panel scoreboard">
         <p>Vitórias ❌: <span id="scoreX">0</span></p>
         <p>Vitórias ⭕: <span id="scoreO">0</span></p>
-        <p>Empates 😮: <span id="scoreDraw">0</span></p>
+        <p>Empates  😮: <span id="scoreDraw">0</span></p>
       </div>
   
       <!-- Centro: status, tabuleiro, botão -->
@@ -61,8 +68,8 @@
   
         <label for="playerSymbol">Seu símbolo:</label>
         <select id="playerSymbol">
-          <option value="X">❌ (X)</option>
-          <option value="O">⭕ (O)</option>
+          <option value="X">❌</option>
+          <option value="O">⭕</option>
         </select>
   
         <label for="firstMove">Quem começa:</label>

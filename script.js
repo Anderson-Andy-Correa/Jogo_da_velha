@@ -6,6 +6,7 @@ const playerSymbolSelect = document.getElementById('playerSymbol');
 const firstMoveSelect = document.getElementById('firstMove');
 const muteBtn = document.getElementById('muteBtn');
 const board = document.getElementById('board');
+const symbolSelect = document.getElementById('symbolSelect');
 const statusText = document.getElementById('status');
 const restartBtn = document.getElementById('restart');
 const toggleThemeBtn = document.getElementById('toggle-theme');
@@ -188,15 +189,12 @@ function restartGame() {
   disableBoard();
   board.classList.remove('gray-out', 'draw');
   stopAllSounds();
-
-  // Define quem começa com base na escolha do jogador
-  const playerSymbol = document.getElementById('playerSymbol').value;  // Obtém o símbolo do jogador
-  currentPlayer = firstMove === 'player' ? playerSymbol : (playerSymbol === 'X' ? 'O' : 'X');
   
   gameActive = true;
   boardLocked = false;
   gameState = ['', '', '', '', '', '', '', '', ''];
   statusText.className = '';
+  updateSymbolDisplay();
   updateStatusText();
   createBoard();
   startTimers();
@@ -256,7 +254,6 @@ function aiMove() {
   }
 }
 
-// Minimax (apenas para O como IA)
 function minimax(newBoard, player) {
   const availSpots = newBoard.map((v, i) => v === '' ? i : null).filter(v => v !== null);
 
@@ -337,6 +334,29 @@ function toggleMute() {
   }
 }
 
+function restartWithNewSymbol() {
+  const selectedSymbol = symbolSelect.value;
+
+  playerSymbol = selectedSymbol;
+  currentPlayer = playerSymbol;
+
+  statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
+
+  // Reiniciar o jogo com o novo símbolo
+  restartGame();  // Reutiliza a função de reiniciar que você já tem
+}
+
+function restartWithNewSymbol() {
+  const selectedSymbol = symbolSelect.value;
+  playerSymbol = selectedSymbol;
+
+  restartGame();
+}
+
+function updateSymbolDisplay() {
+  symbolSelect.value = playerSide;
+}
+
 // Eventos
 restartBtn.addEventListener('click', restartGame);
 toggleThemeBtn.addEventListener('click', toggleTheme);
@@ -345,7 +365,14 @@ difficultySelect.addEventListener('change', () => {
   startTimers();
 });
 muteBtn.addEventListener('click', toggleMute);
-
+symbolSelect.addEventListener('change', () => {
+  const selectedSymbol = symbolSelect.value;
+  playerSide = selectedSymbol;
+  aiSide = selectedSymbol === 'X' ? 'O' : 'X';
+  currentPlayer = playerSide; 
+  updateSymbolDisplay();
+  restartGame();
+});
 
 // Inicialização
 createBoard();
@@ -372,6 +399,9 @@ startGameBtn.addEventListener('click', () => {
 
   // Atualiza UI
   statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
+
+  symbolSelect.value = playerSymbol;
+  
   gameActive = true;
   createBoard();
   startTimers(); 
