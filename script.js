@@ -26,6 +26,8 @@ let currentPlayer = 'X';
 let gameActive = true;
 let gameState = ['', '', '', '', '', '', '', '', ''];
 let scores = { X: 0, O: 0, Draw: 0 };
+let playerSide = 'X';
+let aiSide = 'O';
 
 const winningConditions = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -80,18 +82,18 @@ function formatTime(sec) {
 }
 
 function handleMove(e) {
-  if (!gameActive || boardLocked || currentPlayer !== 'X' || !gameStarted) return;
+  if (!gameActive || boardLocked || currentPlayer !== playerSide || !gameStarted) return;
 
   const index = e.target.getAttribute('data-index');
   if (gameState[index]) return;
 
   soundClick.play();
-  makeMove(index, 'X');
+  makeMove(index, playerSide);
 
-  if (checkResult('X')) return;
+  if (checkResult(playerSide)) return;
 
-  currentPlayer = 'O';
-  currentTimer = 'O';
+  currentPlayer = aiSide;
+  currentTimer = aiSide;
   updateStatusText(); // Atualiza a vez na tela
 
   boardLocked = true; // Bloqueia para esperar a IA
@@ -124,7 +126,7 @@ function checkResult(player) {
     ) {
       const emoji = player === 'X' ? '❌' : '⭕';
       const winClass = player === 'X' ? 'win-x' : 'win-o';
-      const sound = player === 'X' ? soundWin : soundLose;
+      const sound = player === playerSide ? soundWin : soundLose;
 
       stopTimers();
       stopAllSounds();
@@ -174,7 +176,7 @@ function restartGame() {
   disableBoard();
   board.classList.remove('gray-out', 'draw');
   stopAllSounds();
-  currentPlayer = 'X';
+  currentPlayer = playerSide;
   gameActive = true;
   boardLocked = false;
   gameState = ['', '', '', '', '', '', '', '', ''];
@@ -199,7 +201,7 @@ function toggleTheme() {
   
 
 function aiMove() {
-  if (!gameActive) return;
+  if (!gameActive || currentPlayer !== aiSide) return;
 
   const level = difficultySelect.value;
   const available = gameState.map((v, i) => v === '' ? i : null).filter(v => v !== null);
@@ -210,16 +212,16 @@ function aiMove() {
     : minimax(gameState, 'O').index;
 
   if (index !== undefined && gameActive) {
-    makeMove(index, 'O');
+    makeMove(index, aiSide);
 
     // ⚠️ Verifica vitória ou empate. Se acabou o jogo, não faz mais nada.
-    if (checkResult('O')) {
+    if (checkResult(aiSide)) {
       boardLocked = false; // <- Libera só para prevenir travamento permanente
       return;
     }
 
-    currentPlayer = 'X';
-    currentTimer = 'X';
+    currentPlayer = playerSide;
+    currentTimer = playerSide;
     updateStatusText();
     boardLocked = false; // ✅ Desbloqueia corretamente
   }
@@ -294,13 +296,45 @@ createBoard();
 // Garante que o tema esteja definido no início
 document.body.classList.add('dark');
 
+const main = document.getElementById('main');
 const startModal = document.getElementById('startModal');
 const startGameBtn = document.getElementById('startGameBtn');
+const startDifficulty = document.getElementById('startDifficulty');
+const playerSymbolSelect = document.getElementById('playerSymbol');
+const firstMoveSelect = document.getElementById('firstMove');
 
 startGameBtn.addEventListener('click', () => {
   startModal.style.display = 'none';
+  main.classList.remove('hidden');
+
   gameStarted = true;
-  restartGame();
+
+  // Define configurações iniciais
+  difficultySelect.value = startDifficulty.value;
+  const playerSymbol = playerSymbolSelect.value;
+  const firstMove = firstMoveSelect.value;
+
+  currentPlayer = firstMove === 'player' ? playerSymbol : (playerSymbol === 'X' ? 'O' : 'X');
+
+  // Salva o símbolo do jogador
+  playerSide = playerSymbol;
+  aiSide = playerSymbol === 'X' ? 'O' : 'X';
+
+  // Atualiza UI
+  statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
+  gameActive = true;
+  createBoard();
+  startTimers(); 
+
   if (bgMusic.paused) bgMusic.play();
+
+  // Se a IA começa
+  if (currentPlayer === aiSide) {
+    boardLocked = true;
+    setTimeout(() => {
+      aiMove();
+      boardLocked = false;
+    }, 300);
+  }
 });
  

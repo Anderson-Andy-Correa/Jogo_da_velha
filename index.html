@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="game-container">
+  <main id="main" class="game-container hidden">
     <h1>Jogo da Velha</h1>
   
     <div class="controls">
@@ -50,10 +50,32 @@
   <div id="startModal" class="modal">
     <div class="modal-content">
       <h2>Bem-vindo ao Jogo da Velha</h2>
+  
+      <div class="start-options">
+        <label for="startDifficulty">Dificuldade:</label>
+        <select id="startDifficulty">
+          <option value="easy">Fácil</option>
+          <option value="hard">Difícil (Impossível 😈)</option>
+        </select>
+  
+        <label for="playerSymbol">Seu símbolo:</label>
+        <select id="playerSymbol">
+          <option value="X">❌ (X)</option>
+          <option value="O">⭕ (O)</option>
+        </select>
+  
+        <label for="firstMove">Quem começa:</label>
+        <select id="firstMove">
+          <option value="player">Você começa</option>
+          <option value="ai">IA começa</option>
+        </select>
+  
+        <p class="warning">⚠️ O modo difícil é praticamente impossível de vencer.</p>
+      </div>
+  
       <button id="startGameBtn">Começar</button>
     </div>
   </div>
-  
 
   <script src="script.js"></script>
 </body>

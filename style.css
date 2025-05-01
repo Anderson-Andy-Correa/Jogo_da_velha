@@ -309,3 +309,39 @@ body.dark #difficulty {
     text-align: center;
   }
 }
+
+.start-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.start-options label {
+  font-weight: bold;
+}
+
+.start-options select {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  background-color: var(--cell-bg);
+  color: var(--text);
+}
+
+.start-options select:focus {
+  outline: none;
+  border-color: var(--button);
+}
+
+.warning {
+  font-size: 0.9rem;
+  color: #e53935;
+  margin-top: 5px;
+}
+
+.hidden {
+  display: none;
+}
