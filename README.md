@@ -72,6 +72,10 @@ Se todas as células forem preenchidas sem um vencedor, a tela exibe um empate d
 
 # 📦 Instruções para Rodar o Projeto
 
+Jogue pelo [Github Web Pages](https://anderson-andy-correa.github.io/Jogo_da_velha/).
+
+Ou baixe e teste diretamente no seu dispositivo:
+
 1. **Clone o repositório**:
    ```bash
    git clone https://github.com/seu-usuario/jogo-da-velha.git
