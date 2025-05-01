@@ -58,13 +58,6 @@ body {
   height: 100vh;
 }
 
-.game-container {
-  text-align: center;
-  max-width: 900px;
-  width: 100%;
-  padding: 20px;
-}
-
 .board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -141,6 +134,22 @@ body {
 
   .controls {
     flex-direction: column;
+    gap: 10px;
+  }
+
+  #difficulty, #symbolSelect, #toggle-theme, #muteBtn {
+    font-size: 0.9rem; /* Reduz a fonte */
+    padding: 8px 10px; /* Reduz o tamanho do padding */
+  }
+
+  #restart {
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
+
+  .side-panel, .center-panel {
+    width: 100%; /* Faz com que as colunas ocupem toda a largura disponível */
+    text-align: center;
   }
 }
 
@@ -292,6 +301,10 @@ body.dark #difficulty {
     flex-direction: column;
   }
 
+  .game-container {
+    padding: 10px;
+  }
+
   .game-layout {
     flex-direction: column;
     align-items: center;
@@ -306,7 +319,12 @@ body.dark #difficulty {
   }
 
   .scoreboard p, .timers p {
+    font-size: 0.9rem;
     text-align: center;
+  }
+
+  footer {
+    font-size: 0.8rem; 
   }
 }
 
@@ -453,4 +471,53 @@ body.dark #toggle-theme {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+/* Garante que o corpo ocupe toda a altura da tela */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* O container principal do jogo */
+.game-container {
+  flex: 1; /* Isso permite que o conteúdo ocupe o espaço disponível, empurrando o rodapé para baixo */
+  padding: 20px;
+  overflow: hidden;
+  text-align: center;
+  max-width: 900px;
+  width: 100%;
+  padding: 20px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+/* Rodapé */
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text);
+  padding: 15px;
+  background-color: var(--cell-bg);
+  border-top: 2px solid #ccc;
+  margin-top: 20px;
+  width: 100%;
+  position: relative;
+}
+
+body.dark footer {
+  background-color: #161b22; /* Fundo mais escuro no modo escuro */
+  border-top: 2px solid #30363d;
+  color: var(--text);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
