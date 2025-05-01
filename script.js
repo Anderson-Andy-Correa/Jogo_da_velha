@@ -150,6 +150,7 @@ function checkResult(player) {
     }
   }
 
+  // Verifica empate
   if (!gameState.includes('')) {
     stopTimers();
     stopAllSounds();
@@ -166,7 +167,6 @@ function checkResult(player) {
 
   return false;
 }
-
 
 function updateScores() {
   scoreX.textContent = scores.X;
@@ -210,9 +210,13 @@ function aiMove() {
   const available = gameState.map((v, i) => v === '' ? i : null).filter(v => v !== null);
   if (available.length === 0) return;
 
-  let index = level === 'easy'
-    ? available[Math.floor(Math.random() * available.length)]
-    : minimax(gameState, 'O').index;
+  let index;
+
+  if (level === 'easy') {
+    index = available[Math.floor(Math.random() * available.length)];
+  } else {
+    index = minimax(gameState, aiSide).index;
+  }
 
   if (index !== undefined && gameActive) {
     makeMove(index, aiSide);
@@ -327,7 +331,7 @@ startGameBtn.addEventListener('click', () => {
   statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
   gameActive = true;
   createBoard();
-  startTimers(); 
+  startTimers();
 
   if (bgMusic.paused) bgMusic.play();
 
