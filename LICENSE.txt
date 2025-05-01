@@ -1,9 +1,0 @@
-MIT License
-
-Copyright (c) 2025 Anderson Corrêa
-
-A permissão é concedida, gratuitamente, para qualquer pessoa que obtenha uma cópia deste software e dos arquivos de documentação associados (o "Software"), para lidar no Software sem restrições, incluindo, sem limitação, os direitos de usar, copiar, modificar, fundir, publicar, distribuir, sublicenciar e/ou vender cópias do Software, e permitir que as pessoas a quem o Software é fornecido o façam, desde que a seguinte condição seja atendida:
-
-A cópia do Software deve incluir a permissão acima, esta lista de condições e a seguinte isenção de responsabilidade.
-
-O Software é fornecido "no estado em que se encontra", sem garantia de qualquer tipo, expressa ou implícita, incluindo, mas não se limitando a, garantias de comercialização, adequação a um propósito específico e não violação. Em nenhum caso o(s) autor(es) ou detentores de direitos autorais poderão ser responsabilizados por qualquer reclamação, danos ou outra responsabilidade, seja em uma ação de contrato, delito ou de outra forma, decorrente de, fora de ou em conexão com o Software ou o uso ou outros negócios no Software.
