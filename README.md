@@ -16,6 +16,35 @@ Este é um projeto de **Jogo da Velha** onde o usuário pode jogar contra a IA o
 
 <br>
 
+# 🖼️ Demonstrações Visuais
+📌 Tela Inicial – Configurações do Jogo
+Nesta tela, o jogador define as preferências iniciais da partida:
+
+- Escolha do símbolo (❌ ou ⭕)
+- Seleção do nível de dificuldade da IA (Fácil ou Difícil)
+- Definição de quem começa jogando
+
+<img src="./assets/images/Tela_Inicial-Joguin_Velha.png" alt="Tela inicial do jogo" width="600"/>
+
+## 🎮 Tela Principal – Tabuleiro de Jogo
+Após iniciar o jogo, essa tela exibe o tabuleiro interativo.
+É aqui que o jogo acontece: os jogadores alternam as jogadas e podem acompanhar o placar e os tempos de cada rodada.
+
+<img src="./assets/images/Tela_principal-Joguin_Velha.png" alt="Tela principal do jogo" width="600"/>
+
+## 🏆 Tela de Vitória
+Quando um jogador vence, o jogo destaca as células vencedoras com uma animação e exibe o vencedor claramente no topo da tela.
+
+<img src="./assets/images/Tela_Resultado-Joguin_Velha.png" alt="Tela de vitória" width="600"/>
+
+## 🤝 Tela de Empate
+Se todas as células forem preenchidas sem um vencedor, a tela exibe um empate de forma destacada, junto ao som correspondente e efeitos visuais.
+
+<img src="./assets/images/Tela_Empate-Joguin_Velha.png" alt="Tela de empate" width="600"/>
+
+<br>
+
+
 # 🚀 Tecnologias
 
 <div align="center" text-align="center">
