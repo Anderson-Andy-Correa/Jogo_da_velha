@@ -14,7 +14,7 @@ const bgMusic = new Audio('sounds/background.mp3');
 bgMusic.loop = true;
 bgMusic.volume = 0.4;
 
-
+let boardLocked = false;
 let currentPlayer = 'X';
 let gameActive = true;
 let gameState = ['', '', '', '', '', '', '', '', ''];
@@ -43,20 +43,27 @@ function createBoard() {
   
   
 
-function handleMove(e) {
-  const index = e.target.getAttribute('data-index');
-  if (!gameActive || gameState[index]) return;
-
-  soundClick.play();
+  function handleMove(e) {
+    if (!gameActive || boardLocked) return;
   
-  makeMove(index, currentPlayer);
+    const index = e.target.getAttribute('data-index');
+    if (gameState[index]) return;
 
-  if (currentPlayer === 'O') {
-    setTimeout(() => {
-      aiMove();
-    }, 300);
+    soundClick.play();
+    makeMove(index, currentPlayer);
+  
+    // Após a jogada do jogador, verifica se o jogo acabou
+    if (checkResult(currentPlayer)) return;
+  
+    // Se ainda estiver ativo, e for a vez da IA, faz ela jogar
+    if (currentPlayer === 'O') {
+      boardLocked = true; // Bloqueia para esperar a IA
+      setTimeout(() => {
+        aiMove();
+        boardLocked = false; // Libera após a IA jogar
+      }, 300);
+    }
   }
-}
 
 function makeMove(index, player) {
     gameState[index] = player;
@@ -108,6 +115,7 @@ function makeMove(index, player) {
         });
   
         gameActive = false;
+        disableBoard();
         return true;
       }
     }
@@ -122,6 +130,7 @@ function makeMove(index, player) {
         scores.Draw++;
         updateScores();
         gameActive = false;
+        disableBoard();
         return true;
       }
   
@@ -137,8 +146,7 @@ function updateScores() {
 }
 
 function restartGame() {
-    board.classList.remove('gray-out');
-    board.classList.remove('draw');
+    board.classList.remove('gray-out', 'draw');
     stopAllSounds();
     currentPlayer = 'X';
     gameActive = true;
@@ -164,18 +172,25 @@ function restartGame() {
   }
   
 
-function aiMove() {
-  let index;
-  const level = difficultySelect.value;
-  if (level === 'easy') {
+  function aiMove() {
+    if (!gameActive) return; // 🛑 Evita que a IA jogue após fim de jogo
+  
+    let index;
+    const level = difficultySelect.value;
     const available = gameState.map((v, i) => v === '' ? i : null).filter(v => v !== null);
-    index = available[Math.floor(Math.random() * available.length)];
-  } else {
-    index = minimax(gameState, 'O').index;
+  
+    if (available.length === 0) return; // 🛑 Confirma que ainda tem jogadas válidas
+  
+    if (level === 'easy') {
+      index = available[Math.floor(Math.random() * available.length)];
+    } else {
+      index = minimax(gameState, 'O').index;
+    }
+  
+    if (index !== undefined && gameActive) {
+      makeMove(index, 'O');
+    }
   }
-
-  if (index !== undefined) makeMove(index, 'O');
-}
 
 // Minimax (apenas para O como IA)
 function minimax(newBoard, player) {
@@ -219,6 +234,17 @@ function stopAllSounds() {
     });
   }
   
+
+function disableBoard() {
+  Array.from(board.children).forEach(cell => {
+    cell.removeEventListener('click', handleMove);
+    cell.removeEventListener('keydown', handleKey);
+  });
+}
+  
+function handleKey(e) {
+  if (e.key === 'Enter' || e.key === ' ') handleMove(e);
+}
  
 
 // Eventos
