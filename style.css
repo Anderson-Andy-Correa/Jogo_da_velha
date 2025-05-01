@@ -345,3 +345,49 @@ body.dark #difficulty {
 .hidden {
   display: none;
 }
+
+.mute-btn {
+  padding: 10px 20px;
+  background-color: #444; /* Cor escura de fundo */
+  color: white; /* Cor do texto em branco */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.dark .mute-btn {
+  background-color: #333;  /* Um tom mais escuro para o botão */
+  color: white;
+}
+
+body.dark .mute-btn:hover {
+  background-color: #555; /* Cor de fundo ao passar o mouse */
+}
+
+body.dark .mute-btn:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+body.light .mute-btn {
+  background-color: #f0f0f0; /* Cor clara de fundo */
+  color: #333; /* Cor do texto em escuro */
+}
+
+body.light .mute-btn:hover {
+  background-color: #ddd; /* Cor de fundo ao passar o mouse */
+}
+
+body.light .mute-btn:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.mute-btn i {
+  margin-right: 8px;
+}

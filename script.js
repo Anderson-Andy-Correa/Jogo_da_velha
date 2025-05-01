@@ -1,3 +1,10 @@
+const main = document.getElementById('main');
+const startModal = document.getElementById('startModal');
+const startGameBtn = document.getElementById('startGameBtn');
+const startDifficulty = document.getElementById('startDifficulty');
+const playerSymbolSelect = document.getElementById('playerSymbol');
+const firstMoveSelect = document.getElementById('firstMove');
+const muteBtn = document.getElementById('muteBtn');
 const board = document.getElementById('board');
 const statusText = document.getElementById('status');
 const restartBtn = document.getElementById('restart');
@@ -17,6 +24,7 @@ soundWin.volume = 0.3;
 soundLose.volume = 0.3;
 soundDraw.volume = 0.3;
 
+let muted = false;
 let gameStarted = false;
 let totalSeconds = 0;
 let xSeconds = 0;
@@ -31,6 +39,7 @@ let gameState = ['', '', '', '', '', '', '', '', ''];
 let scores = { X: 0, O: 0, Draw: 0 };
 let playerSide = 'X';
 let aiSide = 'O';
+let firstMove = 'player';
 
 const winningConditions = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -179,7 +188,11 @@ function restartGame() {
   disableBoard();
   board.classList.remove('gray-out', 'draw');
   stopAllSounds();
-  currentPlayer = playerSide;
+
+  // Define quem começa com base na escolha do jogador
+  const playerSymbol = document.getElementById('playerSymbol').value;  // Obtém o símbolo do jogador
+  currentPlayer = firstMove === 'player' ? playerSymbol : (playerSymbol === 'X' ? 'O' : 'X');
+  
   gameActive = true;
   boardLocked = false;
   gameState = ['', '', '', '', '', '', '', '', ''];
@@ -189,6 +202,15 @@ function restartGame() {
   startTimers();
   updateTimeDisplay();
   if (bgMusic.paused) bgMusic.play();
+
+  // Se a IA começa, a IA faz sua jogada imediatamente
+  if (currentPlayer === aiSide) {
+    boardLocked = true;
+    setTimeout(() => {
+      aiMove();
+      boardLocked = false;
+    }, 300);
+  }
 }
 
 
@@ -289,6 +311,32 @@ function handleKey(e) {
 }
  
 
+function toggleMute() {
+  muted = !muted;  // Inverte o estado de mute
+
+  if (muted) {
+    // Muda o volume dos sons para 0 (silencioso)
+    soundClick.volume = 0;
+    soundWin.volume = 0;
+    soundLose.volume = 0;
+    soundDraw.volume = 0;
+    bgMusic.volume = 0;
+    
+    // Atualiza o texto do botão para "desmutar"
+    muteBtn.textContent = "🔇";
+  } else {
+    // Restaura o volume original dos sons
+    soundClick.volume = 0.3;
+    soundWin.volume = 0.3;
+    soundLose.volume = 0.3;
+    soundDraw.volume = 0.3;
+    bgMusic.volume = 0.3;
+
+    // Atualiza o texto do botão para "mudo"
+    muteBtn.textContent = "🔊";
+  }
+}
+
 // Eventos
 restartBtn.addEventListener('click', restartGame);
 toggleThemeBtn.addEventListener('click', toggleTheme);
@@ -296,6 +344,8 @@ difficultySelect.addEventListener('change', () => {
   restartGame();
   startTimers();
 });
+muteBtn.addEventListener('click', toggleMute);
+
 
 // Inicialização
 createBoard();
@@ -303,23 +353,16 @@ createBoard();
 // Garante que o tema esteja definido no início
 document.body.classList.add('dark');
 
-const main = document.getElementById('main');
-const startModal = document.getElementById('startModal');
-const startGameBtn = document.getElementById('startGameBtn');
-const startDifficulty = document.getElementById('startDifficulty');
-const playerSymbolSelect = document.getElementById('playerSymbol');
-const firstMoveSelect = document.getElementById('firstMove');
-
 startGameBtn.addEventListener('click', () => {
   startModal.style.display = 'none';
   main.classList.remove('hidden');
 
   gameStarted = true;
 
-  // Define configurações iniciais
+  // Salva as configurações iniciais
   difficultySelect.value = startDifficulty.value;
   const playerSymbol = playerSymbolSelect.value;
-  const firstMove = firstMoveSelect.value;
+  firstMove = firstMoveSelect.value;  // Salva a escolha de quem começa
 
   currentPlayer = firstMove === 'player' ? playerSymbol : (playerSymbol === 'X' ? 'O' : 'X');
 
@@ -331,7 +374,7 @@ startGameBtn.addEventListener('click', () => {
   statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
   gameActive = true;
   createBoard();
-  startTimers();
+  startTimers(); 
 
   if (bgMusic.paused) bgMusic.play();
 
