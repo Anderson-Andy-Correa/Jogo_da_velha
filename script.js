@@ -14,6 +14,13 @@ const bgMusic = new Audio('sounds/background.mp3');
 bgMusic.loop = true;
 bgMusic.volume = 0.4;
 
+let gameStarted = false;
+let totalSeconds = 0;
+let xSeconds = 0;
+let oSeconds = 0;
+let intervalId = null;
+let currentTimer = null;
+let timerActive = false;
 let boardLocked = false;
 let currentPlayer = 'X';
 let gameActive = true;
@@ -40,8 +47,40 @@ function createBoard() {
   });
 }  
 
+function startTimers() {
+  clearInterval(intervalId);
+  totalSeconds = xSeconds = oSeconds = 0;
+  timerActive = true;
+  currentTimer = currentPlayer;
+
+  intervalId = setInterval(() => {
+    if (!timerActive) return;
+    totalSeconds++;
+    if (currentTimer === 'X') xSeconds++;
+    else if (currentTimer === 'O') oSeconds++;
+
+    updateTimeDisplay();
+  }, 1000);
+}
+
+function stopTimers() {
+  timerActive = false;
+}
+
+function updateTimeDisplay() {
+  document.getElementById('totalTime').textContent = formatTime(totalSeconds);
+  document.getElementById('timeX').textContent = formatTime(xSeconds);
+  document.getElementById('timeO').textContent = formatTime(oSeconds);
+}
+
+function formatTime(sec) {
+  const min = String(Math.floor(sec / 60)).padStart(2, '0');
+  const s = String(sec % 60).padStart(2, '0');
+  return `${min}:${s}`;
+}
+
 function handleMove(e) {
-  if (!gameActive || boardLocked || currentPlayer !== 'X') return;
+  if (!gameActive || boardLocked || currentPlayer !== 'X' || !gameStarted) return;
 
   const index = e.target.getAttribute('data-index');
   if (gameState[index]) return;
@@ -52,6 +91,7 @@ function handleMove(e) {
   if (checkResult('X')) return;
 
   currentPlayer = 'O';
+  currentTimer = 'O';
   updateStatusText(); // Atualiza a vez na tela
 
   boardLocked = true; // Bloqueia para esperar a IA
@@ -86,6 +126,7 @@ function checkResult(player) {
       const winClass = player === 'X' ? 'win-x' : 'win-o';
       const sound = player === 'X' ? soundWin : soundLose;
 
+      stopTimers();
       stopAllSounds();
       sound.play();
       statusText.textContent = `Vitória de: ${emoji}`;
@@ -105,6 +146,7 @@ function checkResult(player) {
   }
 
   if (!gameState.includes('')) {
+    stopTimers();
     stopAllSounds();
     soundDraw.play();
     statusText.textContent = 'Empate! 🤝';
@@ -139,6 +181,8 @@ function restartGame() {
   statusText.className = '';
   updateStatusText();
   createBoard();
+  startTimers();
+  updateTimeDisplay();
   if (bgMusic.paused) bgMusic.play();
 }
 
@@ -175,6 +219,7 @@ function aiMove() {
     }
 
     currentPlayer = 'X';
+    currentTimer = 'X';
     updateStatusText();
     boardLocked = false; // ✅ Desbloqueia corretamente
   }
@@ -238,6 +283,10 @@ function handleKey(e) {
 // Eventos
 restartBtn.addEventListener('click', restartGame);
 toggleThemeBtn.addEventListener('click', toggleTheme);
+difficultySelect.addEventListener('change', () => {
+  restartGame();
+  startTimers();
+});
 
 // Inicialização
 createBoard();
@@ -250,6 +299,8 @@ const startGameBtn = document.getElementById('startGameBtn');
 
 startGameBtn.addEventListener('click', () => {
   startModal.style.display = 'none';
+  gameStarted = true;
+  restartGame();
   if (bgMusic.paused) bgMusic.play();
 });
  

@@ -9,31 +9,43 @@
 <body>
   <main class="game-container">
     <h1>Jogo da Velha</h1>
-
+  
     <div class="controls">
-      <label for="difficulty">Dificuldade:</label>
-      <select id="difficulty">
-        <option value="easy">Fácil</option>
-        <option value="hard">Difícil</option>
-      </select>
-
+      <div class="difficulty-group">
+        <label for="difficulty">Dificuldade:</label>
+        <select id="difficulty">
+          <option value="easy">Fácil</option>
+          <option value="hard">Difícil</option>
+        </select>
+      </div>
       <button id="toggle-theme">🌞 / 🌙</button>
     </div>
-
-    <div id="status">Vez de: ❌</div>
-
-    <div class="board" id="board"></div>
-
-    <div class="scoreboard">
-      <tr>
+  
+    <div class="game-layout">
+      <!-- Lado esquerdo: placar -->
+      <div class="side-panel scoreboard">
         <p>Vitórias ❌: <span id="scoreX">0</span></p>
         <p>Vitórias ⭕: <span id="scoreO">0</span></p>
-        <p>Empates  😮: <span id="scoreDraw">0</span></p>
-      </tr>
+        <p>Empates 😮: <span id="scoreDraw">0</span></p>
+      </div>
+  
+      <!-- Centro: status, tabuleiro, botão -->
+      <div class="center-panel">
+        <div id="status">Vez de: ❌</div>
+        <div class="board" id="board"></div>
+        <button id="restart">Reiniciar Jogo</button>
+      </div>
+  
+      <!-- Lado direito: tempos -->
+      <div class="side-panel timers">
+        <p>⏱️ Tempo total: <span id="totalTime">00:00</span></p>
+        <p>⏳ Tempo de ❌: <span id="timeX">00:00</span></p>
+        <p>⏳ Tempo de ⭕: <span id="timeO">00:00</span></p>
+      </div>
     </div>
-
-    <button id="restart">Reiniciar Jogo</button>
   </main>
+  
+  
 
   <div id="startModal" class="modal">
     <div class="modal-content">
