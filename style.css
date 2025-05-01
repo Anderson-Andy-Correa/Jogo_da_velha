@@ -25,25 +25,26 @@ body, .cell, #status, .scoreboard, #restart, #toggle-theme {
 
 
 body.dark {
-  --bg: #121212;
-  --text: #f1f1f1;
-  --cell-bg: #1e1e1e;
-  --cell-hover: #333;
-  --button: #333;
-  --button-hover: #555;
+  --bg: #0d1117;
+  --text: #e6edf3;
+  --cell-bg: #161b22;
+  --cell-hover: #21262d;
+  --button: #238636;
+  --button-hover: #2ea043;
 
-  --x-bg: #1e88e5;
-  --x-border: #1565c0;
-  --x-color: #ffffff;
+  --x-bg: #1e2a3a;
+  --x-border: #58a6ff;
+  --x-color: #58a6ff;
 
-  --o-bg: #fdd835;
-  --o-border: #fbc02d;
-  --o-color: #000000;
+  --o-bg: #3b2f14;
+  --o-border: #d29922;
+  --o-color: #f2cc60;
 
-  --status-x: #64b5f6;
-  --status-o: #fff176;
-  --status-draw: #ffb74d;
+  --status-x: #58a6ff;
+  --status-o: #f2cc60;
+  --status-draw: #8b949e;
 }
+
 
 body {
   font-family: Arial, sans-serif;
@@ -223,3 +224,21 @@ body.dark .winner-cell {
   transition: filter 0.5s ease;
 }
 
+#difficulty {
+  padding: 8px 12px;
+  font-size: 1rem;
+  background-color: var(--cell-bg);
+  color: var(--text);
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark #difficulty {
+  border: 2px solid #30363d;
+}
+
+#difficulty:hover {
+  background-color: var(--cell-hover);
+}

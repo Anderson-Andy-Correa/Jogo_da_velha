@@ -27,117 +27,99 @@ const winningConditions = [
 ];
 
 function createBoard() {
-    board.innerHTML = '';
-    gameState.forEach((cell, index) => {
-      const div = document.createElement('div');
-      div.className = 'cell';
-      div.setAttribute('data-index', index);
-      div.setAttribute('tabindex', 0);
-      div.addEventListener('click', handleMove);
-      div.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') handleMove(e);
-      });
-      board.appendChild(div);
-    });
-  }
-  
-  
+  board.innerHTML = '';
+  gameState.forEach((_, index) => {
+    const div = document.createElement('div');
+    div.className = 'cell';
+    div.setAttribute('data-index', index);
+    div.setAttribute('tabindex', 0);
+    div.setAttribute('aria-label', `Célula ${index + 1}`);
+    div.addEventListener('click', handleMove);
+    div.addEventListener('keydown', handleKey);
+    board.appendChild(div);
+  });
+}  
 
-  function handleMove(e) {
-    if (!gameActive || boardLocked) return;
-  
-    const index = e.target.getAttribute('data-index');
-    if (gameState[index]) return;
+function handleMove(e) {
+  if (!gameActive || boardLocked || currentPlayer !== 'X') return;
 
-    soundClick.play();
-    makeMove(index, currentPlayer);
-  
-    // Após a jogada do jogador, verifica se o jogo acabou
-    if (checkResult(currentPlayer)) return;
-  
-    // Se ainda estiver ativo, e for a vez da IA, faz ela jogar
-    if (currentPlayer === 'O') {
-      boardLocked = true; // Bloqueia para esperar a IA
-      setTimeout(() => {
-        aiMove();
-        boardLocked = false; // Libera após a IA jogar
-      }, 300);
-    }
-  }
+  const index = e.target.getAttribute('data-index');
+  if (gameState[index]) return;
+
+  soundClick.play();
+  makeMove(index, 'X');
+
+  if (checkResult('X')) return;
+
+  currentPlayer = 'O';
+  updateStatusText(); // Atualiza a vez na tela
+
+  boardLocked = true; // Bloqueia para esperar a IA
+  setTimeout(() => {
+    aiMove(); // IA joga
+  }, 300);
+}
 
 function makeMove(index, player) {
-    gameState[index] = player;
-  
-    const cell = board.children[index];
-    const emoji = player === 'X' ? '❌' : '⭕';
-    const filledClass = player === 'X' ? 'filled-x' : 'filled-o';
-  
-    cell.textContent = emoji;
-    cell.classList.add(filledClass);
-    if (checkResult(player)) {
-        return; // Só troca jogador se o jogo não acabou
-      }
-    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-    statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
-  }
-  
+  gameState[index] = player;
+  const cell = board.children[index];
+  const emoji = player === 'X' ? '❌' : '⭕';
+  const filledClass = player === 'X' ? 'filled-x' : 'filled-o';
 
-  function checkResult(player) {
-    for (let condition of winningConditions) {
-      const [a, b, c] = condition;
-      if (
-        gameState[a] &&
-        gameState[a] === gameState[b] &&
-        gameState[a] === gameState[c]
-      ) {
-        var emoji;
-        var winClass;
-        bgMusic.pause();
-        bgMusic.currentTime = 0;
-        if (player === 'X') {
-            soundWin.play();  // Vitória do jogador
-            emoji = '❌';
-            winClass = 'win-x';
-          } else {
-            soundLose.play(); // Toca som de derrota se o jogador perder para a IA
-            emoji = '⭕';
-            winClass = 'win-o';
-          }
-  
-        statusText.textContent = `Vitória de: ${emoji}`;
-        statusText.className = winClass;
-        scores[player]++;
-        updateScores();
-  
-        // Aplica a animação de piscar às células vencedoras
-        [a, b, c].forEach(index => {
-          board.children[index].classList.add('winner-cell');
-        });
-  
-        gameActive = false;
-        disableBoard();
-        return true;
-      }
+  cell.textContent = emoji;
+  cell.classList.add(filledClass);
+}
+
+function updateStatusText() {
+  statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
+}
+
+function checkResult(player) {
+  for (let condition of winningConditions) {
+    const [a, b, c] = condition;
+    if (
+      gameState[a] &&
+      gameState[a] === gameState[b] &&
+      gameState[a] === gameState[c]
+    ) {
+      const emoji = player === 'X' ? '❌' : '⭕';
+      const winClass = player === 'X' ? 'win-x' : 'win-o';
+      const sound = player === 'X' ? soundWin : soundLose;
+
+      stopAllSounds();
+      sound.play();
+      statusText.textContent = `Vitória de: ${emoji}`;
+      statusText.className = winClass;
+      scores[player]++;
+      updateScores();
+
+      // Aplica a animação de piscar às células vencedoras
+      [a, b, c].forEach(index => {
+        board.children[index].classList.add('winner-cell');
+      });
+
+      gameActive = false;
+      disableBoard();
+      return true;
     }
-  
-    if (!gameState.includes('')) {
-        bgMusic.pause();
-        bgMusic.currentTime = 0;
-        soundDraw.play();
-        statusText.textContent = 'Empate! 🤝';
-        statusText.className = 'draw';
-        board.classList.add('gray-out');
-        scores.Draw++;
-        updateScores();
-        gameActive = false;
-        disableBoard();
-        return true;
-      }
-  
-    return false;
   }
-  
-  
+
+  if (!gameState.includes('')) {
+    stopAllSounds();
+    soundDraw.play();
+    statusText.textContent = 'Empate! 🤝';
+    statusText.className = 'draw';
+    board.classList.add('gray-out');
+    scores.Draw++;
+    updateScores();
+    gameActive = false;
+    disableBoard();
+    return true;
+  }
+
+  return false;
+}
+
 
 function updateScores() {
   scoreX.textContent = scores.X;
@@ -145,52 +127,58 @@ function updateScores() {
   scoreDraw.textContent = scores.Draw;
 }
 
+
 function restartGame() {
-    board.classList.remove('gray-out', 'draw');
-    stopAllSounds();
+  disableBoard();
+  board.classList.remove('gray-out', 'draw');
+  stopAllSounds();
+  currentPlayer = 'X';
+  gameActive = true;
+  boardLocked = false;
+  gameState = ['', '', '', '', '', '', '', '', ''];
+  statusText.className = '';
+  updateStatusText();
+  createBoard();
+  if (bgMusic.paused) bgMusic.play();
+}
+
+
+function toggleTheme() {
+  if (document.body.classList.contains('dark')) {
+    document.body.classList.remove('dark');
+    document.body.classList.add('light');
+  } else {
+    document.body.classList.remove('light');
+    document.body.classList.add('dark');
+  }
+}
+  
+
+function aiMove() {
+  if (!gameActive) return;
+
+  const level = difficultySelect.value;
+  const available = gameState.map((v, i) => v === '' ? i : null).filter(v => v !== null);
+  if (available.length === 0) return;
+
+  let index = level === 'easy'
+    ? available[Math.floor(Math.random() * available.length)]
+    : minimax(gameState, 'O').index;
+
+  if (index !== undefined && gameActive) {
+    makeMove(index, 'O');
+
+    // ⚠️ Verifica vitória ou empate. Se acabou o jogo, não faz mais nada.
+    if (checkResult('O')) {
+      boardLocked = false; // <- Libera só para prevenir travamento permanente
+      return;
+    }
+
     currentPlayer = 'X';
-    gameActive = true;
-    gameState = ['', '', '', '', '', '', '', '', ''];
-    statusText.textContent = `Vez de: ❌`;
-    statusText.className = '';
-    createBoard();
-
-    bgMusic.play();
+    updateStatusText();
+    boardLocked = false; // ✅ Desbloqueia corretamente
   }
-  
-  
-  
-
-  function toggleTheme() {
-    if (document.body.classList.contains('dark')) {
-      document.body.classList.remove('dark');
-      document.body.classList.add('light');
-    } else {
-      document.body.classList.remove('light');
-      document.body.classList.add('dark');
-    }
-  }
-  
-
-  function aiMove() {
-    if (!gameActive) return; // 🛑 Evita que a IA jogue após fim de jogo
-  
-    let index;
-    const level = difficultySelect.value;
-    const available = gameState.map((v, i) => v === '' ? i : null).filter(v => v !== null);
-  
-    if (available.length === 0) return; // 🛑 Confirma que ainda tem jogadas válidas
-  
-    if (level === 'easy') {
-      index = available[Math.floor(Math.random() * available.length)];
-    } else {
-      index = minimax(gameState, 'O').index;
-    }
-  
-    if (index !== undefined && gameActive) {
-      makeMove(index, 'O');
-    }
-  }
+}
 
 // Minimax (apenas para O como IA)
 function minimax(newBoard, player) {
@@ -228,12 +216,12 @@ function checkWin(board, player) {
 }
 
 function stopAllSounds() {
-    [soundClick, soundWin, soundDraw, soundLose, bgMusic].forEach(sound => {
-      sound.pause();
-      sound.currentTime = 0;
-    });
-  }
-  
+  [soundClick, soundWin, soundDraw, soundLose, bgMusic].forEach(sound => {
+    sound.pause();
+    sound.currentTime = 0;
+  });
+}
+
 
 function disableBoard() {
   Array.from(board.children).forEach(cell => {
@@ -250,25 +238,18 @@ function handleKey(e) {
 // Eventos
 restartBtn.addEventListener('click', restartGame);
 toggleThemeBtn.addEventListener('click', toggleTheme);
-difficultySelect.addEventListener('change', () => {
-    currentDifficulty = difficultySelect.value;
-    restartGame(); // reinicia automaticamente ao mudar
-});
 
 // Inicialização
 createBoard();
 
 // Garante que o tema esteja definido no início
-if (!document.body.classList.contains('dark') && !document.body.classList.contains('light')) {
-    document.body.classList.add('light');
-  }
+document.body.classList.add('dark');
 
-  const startModal = document.getElementById('startModal');
-  const startGameBtn = document.getElementById('startGameBtn');
-  
-  startGameBtn.addEventListener('click', () => {
-    startModal.style.display = 'none';
-    bgMusic.play();
-  });
-  
-  
+const startModal = document.getElementById('startModal');
+const startGameBtn = document.getElementById('startGameBtn');
+
+startGameBtn.addEventListener('click', () => {
+  startModal.style.display = 'none';
+  if (bgMusic.paused) bgMusic.play();
+});
+ 
