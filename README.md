@@ -134,11 +134,11 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](./LI
 
 <table>
     <tr>
-        <td align=center>
-            <a href="https://github.com/drosemannbnusc">
-                <img src="https://avatars.githubusercontent.com/u/28847302?v=4" width=115px><br>
-                <sub>Douglas Rosemann</sub>
-            </a>
+    <td align="center">
+      <a href="https://www.linkedin.com/in/edwinbehnke/">
+        <img src="https://media.licdn.com/dms/image/v2/D4D35AQF8E_6Awt9stQ/profile-framedphoto-shrink_200_200/profile-framedphoto-shrink_200_200/0/1685384080596?e=1746734400&v=beta&t=p5iHge4P-GNSlxWpVGQIOHb9ZM2BJ_S4NtS6mFYVmt8" width="115"><br>
+        <sub>Edwin Behnke</sub>
+      </a>
         </td>
     </tr>
 </table>
