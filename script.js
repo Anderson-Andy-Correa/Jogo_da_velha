@@ -14,11 +14,11 @@ const difficultySelect = document.getElementById('difficulty');
 const scoreX = document.getElementById('scoreX');
 const scoreO = document.getElementById('scoreO');
 const scoreDraw = document.getElementById('scoreDraw');
-const soundClick = new Audio('sounds/click.mp3');
-const soundWin = new Audio('sounds/Win.mp3');
-const soundLose = new Audio('sounds/Fail.ogg');
-const soundDraw = new Audio('sounds/Empate.ogg');
-const bgMusic = new Audio('sounds/background.mp3');
+const soundClick = new Audio('./assets/sounds/click.mp3');
+const soundWin = new Audio('./assets/sounds/Win.mp3');
+const soundLose = new Audio('./assets/ounds/Fail.ogg');
+const soundDraw = new Audio('./assets/sounds/Empate.ogg');
+const bgMusic = new Audio('./assets/sounds/background.mp3');
 bgMusic.loop = true;
 bgMusic.volume = 0.3;
 soundWin.volume = 0.3;
@@ -401,7 +401,7 @@ startGameBtn.addEventListener('click', () => {
   statusText.textContent = `Vez de: ${currentPlayer === 'X' ? '❌' : '⭕'}`;
 
   symbolSelect.value = playerSymbol;
-  
+
   gameActive = true;
   createBoard();
   startTimers(); 
